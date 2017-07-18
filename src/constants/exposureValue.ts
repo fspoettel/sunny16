@@ -1,4 +1,4 @@
-module.exports = [
+export const EXPOSURE_VALUES: number[] = [
   -6,
   -5,
   -4,

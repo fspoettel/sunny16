@@ -1,15 +1,28 @@
 {
   "name": "sunny16",
   "version": "0.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
+    "build": "tsc",
+    "prepublish": "yarn build",
     "test": "jest"
   },
   "devDependencies": {
-    "eslint": "^3.19.0",
-    "eslint-config-airbnb-base": "^11.2.0",
-    "eslint-plugin-import": "^2.3.0",
-    "jest-cli": "^20.0.4"
+    "jest": "^20.0.4",    
+    "ts-jest": "^20.0.7",
+    "tslint": "^5.5.0",
+    "tslint-config-airbnb": "^5.2.1",
+    "typescript": "^2.4.2"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "transform": {
+      "\\.ts$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "/__tests__/.*\\.(ts|js)$"
   }
 }
