@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
+    "lint": "tslint --project .",
     "prepublish": "yarn build",
     "test": "jest"
   },
