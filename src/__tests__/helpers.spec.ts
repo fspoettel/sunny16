@@ -1,9 +1,5 @@
 import { clip } from '../helpers';
 
-declare let describe;
-declare let it;
-declare let expect;
-
 describe('clip()', () => {
   const mockData = ['foo', 'bar', 'baz', 'foobar', 'foobaz'];
 

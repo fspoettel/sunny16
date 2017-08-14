@@ -1,12 +1,6 @@
-import Sunny16, {
-  EXPOSURE_VALUES,  
-  FILM_SPEEDS,
-} from '../index';
+import { EXPOSURE_VALUES, FILM_SPEEDS } from '../index';
 import { isNumeric } from '../helpers';
-
-declare let describe;
-declare let it;
-declare let expect;
+import { Sunny16 } from '../sunny16';
 
 const fNumberRange = [0.7, 520];
 const shutterSpeedRange = ['1/16000', '64'];
@@ -45,22 +39,22 @@ describe('Sunny16', () => {
         settings: [{
           fNumber: 16,
           shutterSpeed: '1/250',
-        }]
+        }],
       });
     });
-    
+
     it('filters out-of-range settings', () => {
       const instance = getInstance([16, 16], ['1', '1']);
       const result = instance.byShutterSpeed(15, 200);
       expect(result.settings).toHaveLength(0);
     });
-    
+
     it('matches snapshot results for all possible configurations', () => {
       const instance = getInstance(fNumberRange, shutterSpeedRange);
-      const allCalculations = EXPOSURE_VALUES.map(ev => {
+      const allCalculations = EXPOSURE_VALUES.map((ev) => {
         return FILM_SPEEDS.map(iso => instance.byFNumber(ev, iso));
       });
-    
+
       const snapShot = JSON.stringify(allCalculations);
       expect(snapShot).toMatchSnapshot();
     });
@@ -76,7 +70,7 @@ describe('Sunny16', () => {
         settings: [{
           fNumber: 16,
           shutterSpeed: '1/250',
-        }]
+        }],
       });
     });
 
@@ -85,13 +79,13 @@ describe('Sunny16', () => {
       const result = instance.byShutterSpeed(15, 200);
       expect(result.settings).toHaveLength(0);
     });
-    
+
     it('matches snapshot results for all possible configurations', () => {
       const instance = getInstance(fNumberRange, shutterSpeedRange);
-      const allCalculations = EXPOSURE_VALUES.map(ev => {
+      const allCalculations = EXPOSURE_VALUES.map((ev) => {
         return FILM_SPEEDS.map(iso => instance.byShutterSpeed(ev, iso));
       });
-          
+
       const snapShot = JSON.stringify(allCalculations);
       expect(snapShot).toMatchSnapshot();
     });
@@ -103,13 +97,13 @@ describe('Sunny16', () => {
       const result = instance.exposureValue(16, '1/250');
       expect(result).toEqual(16);
     });
-    
+
     it('returns null for out-of-range values', () => {
       const instance = getInstance([1, 11]);
       const result = instance.exposureValue(16, '1/250');
       expect(result).toBeNull();
     });
-    
+
     it('matches snapshot results for all possible configurations', () => {
       const instance = getInstance(fNumberRange, shutterSpeedRange);
       const fNumbers = instance.getFNumbers();
@@ -128,13 +122,13 @@ describe('Sunny16', () => {
       const result = instance.lightValue(16, '1/250', 200);
       expect(result).toEqual(15);
     });
-    
+
     it('returns null for out-of-range values', () => {
       const instance = getInstance([1, 11]);
       const result = instance.lightValue(16, '1/250', 200);
       expect(result).toBeNull();
     });
-    
+
     it('matches snapshot results for all possible configurations', () => {
       const instance = getInstance(fNumberRange, shutterSpeedRange);
       const fNumbers = instance.getFNumbers();
