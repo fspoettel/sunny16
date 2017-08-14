@@ -1,12 +1,12 @@
 {
   "name": "sunny16",
-  "version": "0.0.0",
+  "version": "0.1.1",
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
     "build": "tsc",
     "lint": "tslint --project .",
-    "prepublish": "yarn build",
+    "prepare": "yarn build",
     "test": "jest"
   },
   "devDependencies": {
