@@ -1,34 +1,34 @@
 import { isNumeric } from './helpers';
 import { EXPOSURE_VALUES } from './constants/exposureValue';
 
-interface calculateExposureValueI {
-  (exactFNumber: number, exactShutterSpeed: number, filterOutOfRange: boolean): number | null;
+interface calcExposureValueI {
+  (exactFNumber: number, exactShutterSpeed: number, limitRange: boolean): number | null;
 }
 
 /** Derives an absolute exposure value (EV) (not connected to filmSpeed) */
-export const calculateExposureValue: calculateExposureValueI = function (exactFNumber, exactShutterSpeed, filterOutOfRange = true) {
+export const calcExposureValue: calcExposureValueI = function (exactFNumber, exactShutterSpeed, limitRange = true) {
   if (!isNumeric(exactFNumber) || !isNumeric(exactShutterSpeed)) {
     throw new Error();
   }
 
   const x = Math.round(Math.log2((exactFNumber ** 2) / exactShutterSpeed));
 
-  if (filterOutOfRange && EXPOSURE_VALUES.indexOf(x) === -1) {
+  if (limitRange && EXPOSURE_VALUES.indexOf(x) === -1) {
     return null;
   }
 
   return Math.round(x);
 };
 
-interface calculateLightValueI {
+interface calcLightValueI {
   (fNumber: number, shutterSpeed: number, filmSpeed: number): number | null;
 }
 
 /** Derives an exposure value (LV) relative to ISO100 */
-export const calculateLightValue: calculateLightValueI = function (fNumber, shutterSpeed, filmSpeed) {
+export const calcLightValue: calcLightValueI = function (fNumber, shutterSpeed, filmSpeed) {
   const y = Math.log2(filmSpeed / 100);
-  const x = calculateExposureValue(fNumber, shutterSpeed, false);
-  
+  const x = calcExposureValue(fNumber, shutterSpeed, false);
+
   if (x === null) { return null; }
 
   const result = x - y;
@@ -38,12 +38,12 @@ export const calculateLightValue: calculateLightValueI = function (fNumber, shut
   return result;
 };
 
-interface calculateFNumberI {
+interface calcFNumberI {
   (ev: number, exactShutterSpeed: number, filmSpeed: number): number;
 }
 
 /** Derives exact fNumber */
-export const calculateFNumber: calculateFNumberI= function (ev, exactShutterSpeed, filmSpeed) {
+export const calcFNumber: calcFNumberI = function (ev, exactShutterSpeed, filmSpeed) {
   if (!Number.isInteger(ev) || !isNumeric(exactShutterSpeed || !Number.isInteger(filmSpeed))) {
     throw new Error();
   }
@@ -53,12 +53,12 @@ export const calculateFNumber: calculateFNumberI= function (ev, exactShutterSpee
   return x;
 };
 
-interface calculateShutterSpeedI {
+interface calcShutterSpeedI {
   (ev: number, exactFNumber: number, filmSpeed: number): number;
 }
 
 /** Derives exact shutterSpeed */
-export const calculateShutterSpeed: calculateShutterSpeedI = function (ev, exactFNumber, filmSpeed) {
+export const calcShutterSpeed: calcShutterSpeedI = function (ev, exactFNumber, filmSpeed) {
   if (!Number.isInteger(ev) || !isNumeric(exactFNumber) || !Number.isInteger(filmSpeed)) {
     throw new Error();
   }
@@ -69,12 +69,12 @@ export const calculateShutterSpeed: calculateShutterSpeedI = function (ev, exact
 };
 
 
-interface calculateExactFNumberI {
+interface calcExactFNumberI {
   (fNumberSpeedStop: number): number;
 }
 
 /** Derives exact fNumber from the corresponding stopNumber */
-export const calculateExactFNumber: calculateExactFNumberI = function (fNumberSpeedStop) {
+export const calcExactFNumber: calcExactFNumberI = function (fNumberSpeedStop) {
   if (!Number.isInteger(fNumberSpeedStop)) {
     throw new Error();
   }
@@ -83,12 +83,12 @@ export const calculateExactFNumber: calculateExactFNumberI = function (fNumberSp
   return x;
 };
 
-interface calculateExactShutterSpeedI {
+interface calcExactShutterSpeedI {
   (shutterSpeedStop: number): number;
 }
 
 /** Derives exact shutterSpeed from the corresponding stopNumber */
-export const calculateExactShutterSpeed: calculateExactShutterSpeedI = function (shutterSpeedStop) {
+export const calcExactShutterSpeed: calcExactShutterSpeedI = function (shutterSpeedStop) {
   if (!Number.isInteger(shutterSpeedStop)) {
     throw new Error();
   }
