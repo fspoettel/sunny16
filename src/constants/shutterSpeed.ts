@@ -1,5 +1,3 @@
-/// <reference path="../index.d.ts" />
-
 export const SHUTTER_SPEEDS: [ShutterSpeedType] = [
   { stop: -14, nominal:'1/16000' },
   { stop: -13, nominal:'1/8000' },

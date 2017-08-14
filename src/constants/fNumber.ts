@@ -1,5 +1,3 @@
-/// <reference path="../index.d.ts" />
-
 export const F_NUMBERS: [FNumberType] = [
   { stop: -1, nominal: 0.7 },
   { stop: 0, nominal: 1 },
