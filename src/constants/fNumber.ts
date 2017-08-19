@@ -1,4 +1,4 @@
-export const F_NUMBERS: [FNumberType] = [
+export const F_NUMBERS: FNumberType[] = [
   { stop: -1, nominal: 0.7 },
   { stop: 0, nominal: 1 },
   { stop: 1, nominal: 1.4 },

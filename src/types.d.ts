@@ -31,5 +31,10 @@ interface cameraSettings {
   settings: cameraSetting[];
 }
 
+interface configI {
+  fNumbers?: FNumberType[],
+  shutterSpeeds?: ShutterSpeedType[],
+}
+
 type anyCameraValue = FNumberType|ShutterSpeedType;
 type anyExactCameraValue = FNumberExactType|ShutterSpeedExactType;
