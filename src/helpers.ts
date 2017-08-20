@@ -75,7 +75,7 @@ interface exactSelectorI {
   (val: number): (o: anyExactCameraValue) => boolean;
 }
 
-export const exactSelector = val => o => compareFloats(exactValue(o), val);
+export const exactSelector: exactSelectorI = val => o => compareFloats(exactValue(o), val);
 
 
 /** not null find selector */
@@ -87,4 +87,3 @@ export const notNullSelector: notNullSelectorI = val => (o) => {
   if (val) { return !!o[val]; }
   return !!o;
 };
-

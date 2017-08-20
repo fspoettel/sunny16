@@ -34,12 +34,12 @@ const setBounds: setBoundsI = function (data, min, max) {
 };
 
 /** setBounds for fNumbers */
-const setFNumberBounds = function (data, min?, max?): FNumberType[] {
+const setFNumberBounds = function (data: FNumberType[], min?: number, max?: number): FNumberType[] {
   return setBounds(data, min, max);
 };
 
 /** setBounds for shutterSpeeds */
-const setShutterSpeedBounds = function (data, min?, max?): ShutterSpeedType[] {
+const setShutterSpeedBounds = function (data:ShutterSpeedType[], min?: string, max?: string): ShutterSpeedType[] {
   return setBounds(data, min, max);
 };
 
