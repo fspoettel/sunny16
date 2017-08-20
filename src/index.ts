@@ -1,13 +1,12 @@
-import { FILM_SPEEDS } from './constants/filmSpeed';
-import { SHUTTER_SPEEDS } from './constants/shutterSpeed';
-import { F_NUMBERS } from './constants/fNumber';
-import { EXPOSURE_VALUES } from './constants/exposureValue';
-import { Sunny16 } from './sunny16';
-
+export { FILM_SPEEDS } from './constants/filmSpeed';
+export { SHUTTER_SPEEDS } from './constants/shutterSpeed';
+export { F_NUMBERS } from './constants/fNumber';
+export { EXPOSURE_VALUES } from './constants/exposureValue';
 export {
-  EXPOSURE_VALUES,
-  F_NUMBERS,
-  FILM_SPEEDS,
-  SHUTTER_SPEEDS,
-  Sunny16,
-};
+  getFNumbers,
+  getShutterSpeeds,
+  byFNumber,
+  byShutterSpeed,
+  exposureValue,
+  lightValue,
+} from './sunny16';
