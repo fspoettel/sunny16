@@ -26,14 +26,14 @@ interface cameraSetting {
 }
 
 interface cameraSettings {
-  ev: number;
+  lightValue: number;
   filmSpeed: number;
   settings: cameraSetting[];
 }
 
 interface configI {
-  fNumbers?: FNumberType[],
-  shutterSpeeds?: ShutterSpeedType[],
+  fNumbers?: FNumberType[];
+  shutterSpeeds?: ShutterSpeedType[];
 }
 
 type anyCameraValue = FNumberType|ShutterSpeedType;

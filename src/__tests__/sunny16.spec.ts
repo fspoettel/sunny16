@@ -1,8 +1,8 @@
-import { EXPOSURE_VALUES, FILM_SPEEDS } from '../index';
-import { isNumeric } from '../helpers';
 import {
   getFNumbers,
   getShutterSpeeds,
+  getExposureValues,
+  getFilmSpeeds,
   byFNumber,
   byShutterSpeed,
   exposureValue,
@@ -28,7 +28,7 @@ describe('Sunny16', () => {
       const result = byFNumber(15, 200, config);
 
       expect(result).toMatchObject({
-        ev: 15,
+        lightValue: 15,
         filmSpeed: 200,
         settings: [{
           fNumber: 16,
@@ -48,8 +48,10 @@ describe('Sunny16', () => {
     });
 
     it('matches snapshot results for all possible configurations', () => {
-      const allCalculations = EXPOSURE_VALUES.map((ev) => {
-        return FILM_SPEEDS.map(iso => byFNumber(ev, iso, configAll));
+      const exposureValues = getExposureValues();
+      const filmSpeeds = getFilmSpeeds();
+      const allCalculations = exposureValues.map((ev) => {
+        return filmSpeeds.map(iso => byFNumber(ev, iso, configAll));
       });
 
       const snapShot = JSON.stringify(allCalculations);
@@ -68,7 +70,7 @@ describe('Sunny16', () => {
       const result = byShutterSpeed(15, 200, config);
 
       expect(result).toMatchObject({
-        ev: 15,
+        lightValue: 15,
         filmSpeed: 200,
         settings: [{
           fNumber: 16,
@@ -88,8 +90,11 @@ describe('Sunny16', () => {
     });
 
     it('matches snapshot results for all possible configurations', () => {
-      const allCalculations = EXPOSURE_VALUES.map((ev) => {
-        return FILM_SPEEDS.map(iso => byShutterSpeed(ev, iso, configAll));
+      const exposureValues = getExposureValues();
+      const filmSpeeds = getFilmSpeeds();
+
+      const allCalculations = exposureValues.map((ev) => {
+        return filmSpeeds.map(iso => byShutterSpeed(ev, iso, configAll));
       });
 
       const snapShot = JSON.stringify(allCalculations);
@@ -101,15 +106,6 @@ describe('Sunny16', () => {
     it('returns an integer', () => {
       const result = exposureValue(16, '1/250');
       expect(result).toEqual(16);
-    });
-
-    it('returns null for out-of-range values', () => {
-      const config = {
-        fNumbers: getFNumbers(1, 11),
-      };
-
-      const result = exposureValue(16, '1/250', config);
-      expect(result).toBeNull();
     });
 
     it('matches snapshot results for all possible configurations', () => {
@@ -129,20 +125,14 @@ describe('Sunny16', () => {
       expect(result).toEqual(15);
     });
 
-    it('returns null for out-of-range values', () => {
-      const config = {
-        fNumbers: getFNumbers(1, 11),
-      };
-      const result = lightValue(16, '1/250', 200, config);
-      expect(result).toBeNull();
-    });
-
     it('matches snapshot results for all possible configurations', () => {
       const fNumbers = getFNumbers();
       const shutterSpeeds = getShutterSpeeds();
+      const filmSpeeds = getFilmSpeeds();
+
       const result = fNumbers
         .map(fNumber => shutterSpeeds
-          .map(speed => FILM_SPEEDS
+          .map(speed => filmSpeeds
             .map(iso => lightValue(fNumber.nominal, speed.nominal, iso))));
 
       const snapShot = JSON.stringify(result);
@@ -150,4 +140,3 @@ describe('Sunny16', () => {
     });
   });
 });
-
