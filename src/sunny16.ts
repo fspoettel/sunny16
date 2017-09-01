@@ -1,4 +1,6 @@
+import { EXPOSURE_VALUES } from './constants/exposureValue';
 import { F_NUMBERS } from './constants/fNumber';
+import { FILM_SPEEDS } from './constants/filmSpeed';
 import { SHUTTER_SPEEDS } from './constants/shutterSpeed';
 
 import {
@@ -23,7 +25,7 @@ import {
 
 /** clips an array with two bound functions */
 interface setBoundsI {
-  (data: anyCameraValue[], min?: number|string, max?: number|string): any;
+  (data: any[], min?: number|string, max?: number|string): any;
 }
 
 const setBounds: setBoundsI = function (data, min, max) {
@@ -40,6 +42,11 @@ const setFNumberBounds = function (data: FNumberType[], min?: number, max?: numb
 
 /** setBounds for shutterSpeeds */
 const setShutterSpeedBounds = function (data:ShutterSpeedType[], min?: string, max?: string): ShutterSpeedType[] {
+  return setBounds(data, min, max);
+};
+
+/** setBounds for numerical values */
+const setNumberBounds = function (data:number[], min?: number, max?: number): number[] {
   return setBounds(data, min, max);
 };
 
@@ -82,8 +89,29 @@ interface getShutterSpeedsI {
 export const getShutterSpeeds: getShutterSpeedsI = function (min, max) {
   if (!min && !max) { return SHUTTER_SPEEDS; }
   return setShutterSpeedBounds(SHUTTER_SPEEDS, min, max);
+};
+
+/** gets (clipped) filmSpeeds */
+
+interface getFilmSpeedsI {
+  (min?: number, max?: number): number[];
 }
-;
+
+export const getFilmSpeeds: getFilmSpeedsI = function (min, max) {
+  if (!min && !max) { return FILM_SPEEDS; }
+  return setNumberBounds(FILM_SPEEDS, min, max);
+};
+
+/** gets (clipped) exposureValues */
+
+interface getExposureValuesI {
+  (min?: number, max?: number): number[];
+}
+
+export const getExposureValues: getExposureValuesI = function (min, max) {
+  if (!min && !max) { return EXPOSURE_VALUES; }
+  return setNumberBounds(EXPOSURE_VALUES, min, max);
+};
 
 /** Calculates LightValue by fNumber */
 interface byFNumberI {
@@ -92,7 +120,7 @@ interface byFNumberI {
 
 export const byFNumber: byFNumberI =  function (lightValue, filmSpeed, config) {
   const fNumberArr = (config && config.fNumbers) || getFNumbers(2, 16);
-  const shutterSpeedArr = (config && config.shutterSpeeds) || getShutterSpeeds('1/1000', '1');
+  const shutterSpeedArr = (config && config.shutterSpeeds) || getShutterSpeeds('1/1000', '1');
 
   const fNumbers = decorateExactFNumbers(fNumberArr);
   const shutterSpeeds = decorateExactShutterSpeeds(shutterSpeedArr);
