@@ -236,10 +236,10 @@ export const byShutterSpeed: byShutterSpeedI = function (lightValue, filmSpeed, 
 
 /** Calculates ExposureValue */
 interface exposureValueI {
-  (nominalFNumber: number, nominalShutterSpeed: string, config?: configI): number|null;
+  (nominalFNumber: number, nominalShutterSpeed: string): number|null;
 }
 
-export const exposureValue: exposureValueI = function (nominalFNumber, nominalShutterSpeed, config) {
+export const exposureValue: exposureValueI = function (nominalFNumber, nominalShutterSpeed) {
   if (!validateNumber(nominalFNumber, true)) {
     throw new Sunny16Exception(
       `Called with wrongly typed argument nominalFNumber(${nominalFNumber}), expecting number.`,
@@ -252,15 +252,8 @@ export const exposureValue: exposureValueI = function (nominalFNumber, nominalSh
     );
   }
 
-  if (!validateConfig(config)) {
-    throw new Sunny16Exception(`Called with invalid config (${config}).`);
-  }
-
-  const fNumberArr = (config && config.fNumbers) || getFNumbers();
-  const shutterSpeedArr = (config && config.shutterSpeeds) || getShutterSpeeds();
-
-  const fNumbers = decorateExactFNumbers(fNumberArr);
-  const shutterSpeeds = decorateExactShutterSpeeds(shutterSpeedArr);
+  const fNumbers = decorateExactFNumbers(getFNumbers());
+  const shutterSpeeds = decorateExactShutterSpeeds(getShutterSpeeds());
 
   const fNumber = fNumbers.find(nominalSelector(nominalFNumber));
   const shutterSpeed = shutterSpeeds.find(nominalSelector(nominalShutterSpeed));
@@ -270,12 +263,12 @@ export const exposureValue: exposureValueI = function (nominalFNumber, nominalSh
   return calcExposureValue(exactValue(fNumber), exactValue(shutterSpeed), true);
 };
 
-/** Get LV for fNumber & shutterSpeed and target filmSpeed (in nominal representaiton) */
+/** Get LV for fNumber & shutterSpeed and target filmSpeed (in nominal representation) */
 interface lightValueI {
-  (nominalFNumber: number, nominalShutterSpeed: string, filmSpeed: number, config?: configI): number|null;
+  (nominalFNumber: number, nominalShutterSpeed: string, filmSpeed: number): number|null;
 }
 
-export const lightValue: lightValueI = function (nominalFNumber, nominalShutterSpeed, filmSpeed, config) {
+export const lightValue: lightValueI = function (nominalFNumber, nominalShutterSpeed, filmSpeed) {
   if (!validateNumber(nominalFNumber, true)) {
     throw new Sunny16Exception(
       `Called with wrongly typed argument nominalFNumber(${nominalFNumber}), expecting number.`,
@@ -288,15 +281,8 @@ export const lightValue: lightValueI = function (nominalFNumber, nominalShutterS
     );
   }
 
-  if (!validateConfig(config)) {
-    throw new Sunny16Exception(`Called with invalid config (${config}).`);
-  }
-
-  const fNumberArr = (config && config.fNumbers) || getFNumbers();
-  const shutterSpeedArr = (config && config.shutterSpeeds) || getShutterSpeeds();
-
-  const fNumbers = decorateExactFNumbers(fNumberArr);
-  const shutterSpeeds = decorateExactShutterSpeeds(shutterSpeedArr);
+  const fNumbers = decorateExactFNumbers(getFNumbers());
+  const shutterSpeeds = decorateExactShutterSpeeds(getShutterSpeeds());
 
   const fNumber = fNumbers.find(nominalSelector(nominalFNumber));
   const shutterSpeed = shutterSpeeds.find(nominalSelector(nominalShutterSpeed));
@@ -305,3 +291,6 @@ export const lightValue: lightValueI = function (nominalFNumber, nominalShutterS
 
   return calcLightValue(exactValue(fNumber), exactValue(shutterSpeed), filmSpeed);
 };
+
+/** Public API cameraSettings alias */
+export const cameraSettings = byShutterSpeed;

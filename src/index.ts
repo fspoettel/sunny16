@@ -5,6 +5,7 @@ export {
   getFilmSpeeds,
   byFNumber,
   byShutterSpeed,
+  cameraSettings,
   exposureValue,
   lightValue,
 } from './sunny16';

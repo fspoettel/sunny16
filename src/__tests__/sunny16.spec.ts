@@ -108,15 +108,6 @@ describe('Sunny16', () => {
       expect(result).toEqual(16);
     });
 
-    it('returns null for out-of-range values', () => {
-      const config = {
-        fNumbers: getFNumbers(1, 11),
-      };
-
-      const result = exposureValue(16, '1/250', config);
-      expect(result).toBeNull();
-    });
-
     it('matches snapshot results for all possible configurations', () => {
       const fNumbers = getFNumbers();
       const shutterSpeeds = getShutterSpeeds();
@@ -132,14 +123,6 @@ describe('Sunny16', () => {
     it('returns an integer', () => {
       const result = lightValue(16, '1/250', 200);
       expect(result).toEqual(15);
-    });
-
-    it('returns null for out-of-range values', () => {
-      const config = {
-        fNumbers: getFNumbers(1, 11),
-      };
-      const result = lightValue(16, '1/250', 200, config);
-      expect(result).toBeNull();
     });
 
     it('matches snapshot results for all possible configurations', () => {
