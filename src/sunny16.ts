@@ -31,59 +31,29 @@ import {
 } from './validation';
 
 /** clips an array with two bound functions */
-interface setBoundsI {
-  (data: any[], min?: number|string, max?: number|string): any;
-}
-
-const setBounds: setBoundsI = function (data, min, max) {
+function setBounds<T>(data: T[], min?: any, max?: any): T[] {
   const minVal = min ? nominalSelector(min) : undefined;
   const maxVal = max ? nominalSelector(max) : undefined;
 
-  return clip(data, minVal, maxVal);
-};
-
-/** setBounds for fNumbers */
-const setFNumberBounds = function (data: FNumberType[], min?: number, max?: number): FNumberType[] {
-  return setBounds(data, min, max);
-};
-
-/** setBounds for shutterSpeeds */
-const setShutterSpeedBounds = function (data:ShutterSpeedType[], min?: string, max?: string): ShutterSpeedType[] {
-  return setBounds(data, min, max);
-};
-
-/** setBounds for numerical values */
-const setNumberBounds = function (data:number[], min?: number, max?: number): number[] {
-  return setBounds(data, min, max);
-};
-
-/** Decorates the exact fNumber value */
-interface decorateExactFNumbersI {
-  (fNumbers: FNumberType[]): FNumberExactType[];
+  return clip<T>(data, minVal, maxVal);
 }
 
-const decorateExactFNumbers: decorateExactFNumbersI = function (fNumbers) {
+/** Decorates the exact fNumber value */
+function decorateExactFNumbers(fNumbers: FNumberType[]): FNumberExactType[] {
   return fNumbers.map(fNumber => Object.assign({}, fNumber, {
     exact: calcExactFNumber(stopNumber(fNumber)),
   }));
-};
-
-interface decorateExactShutterSpeedI {
-  (shutterSpeeds: ShutterSpeedType[]): ShutterSpeedExactType[];
 }
 
-const decorateExactShutterSpeeds: decorateExactShutterSpeedI = function (shutterSpeeds) {
+/** Decorates the exact shutterSpeed value */
+function decorateExactShutterSpeeds(shutterSpeeds: ShutterSpeedType[]): ShutterSpeedExactType[] {
   return shutterSpeeds.map(shutterSpeed => Object.assign({}, shutterSpeed, {
     exact: calcExactShutterSpeed(stopNumber(shutterSpeed)),
   }));
-};
-
-/** gets (clipped) fNumbers */
-interface getFNumbersI {
-  (min?: number, max?: number): FNumberType[];
 }
 
-export const getFNumbers: getFNumbersI = function (min, max) {
+/** gets (clipped) fNumbers */
+export function getFNumbers(min?: number, max?: number):FNumberType[]  {
   if (!validateNumber(min, false)) {
     throw new Sunny16Exception(`Called with wrongly typed argument min(${min}), expecting number.`);
   }
@@ -93,15 +63,11 @@ export const getFNumbers: getFNumbersI = function (min, max) {
   }
 
   if (!min && !max) { return F_NUMBERS; }
-  return setFNumberBounds(F_NUMBERS, min, max);
-};
-
-/** gets (clipped) shutterSpeeds */
-interface getShutterSpeedsI {
-  (min?: string, max?: string): ShutterSpeedType[];
+  return setBounds<FNumberType>(F_NUMBERS, min, max);
 }
 
-export const getShutterSpeeds: getShutterSpeedsI = function (min, max) {
+/** gets (clipped) shutterSpeeds */
+export function getShutterSpeeds(min?: string, max?: string): ShutterSpeedType[] {
   if (!validateString(min, false)) {
     throw new Sunny16Exception(`Called with wrongly typed argument min(${min}), expecting string.`);
   }
@@ -111,16 +77,11 @@ export const getShutterSpeeds: getShutterSpeedsI = function (min, max) {
   }
 
   if (!min && !max) { return SHUTTER_SPEEDS; }
-  return setShutterSpeedBounds(SHUTTER_SPEEDS, min, max);
-};
-
-/** gets (clipped) filmSpeeds */
-
-interface getFilmSpeedsI {
-  (min?: number, max?: number): number[];
+  return setBounds<ShutterSpeedType>(SHUTTER_SPEEDS, min, max);
 }
 
-export const getFilmSpeeds: getFilmSpeedsI = function (min, max) {
+/** gets (clipped) filmSpeeds */
+export function getFilmSpeeds(min?: number, max?: number): number[] {
   if (!validateNumber(min, false)) {
     throw new Sunny16Exception(`Called with wrongly typed argument min(${min}), expecting number.`);
   }
@@ -130,16 +91,11 @@ export const getFilmSpeeds: getFilmSpeedsI = function (min, max) {
   }
 
   if (!min && !max) { return FILM_SPEEDS; }
-  return setNumberBounds(FILM_SPEEDS, min, max);
-};
-
-/** gets (clipped) exposureValues */
-
-interface getExposureValuesI {
-  (min?: number, max?: number): number[];
+  return setBounds<number>(FILM_SPEEDS, min, max);
 }
 
-export const getExposureValues: getExposureValuesI = function (min, max) {
+/** gets (clipped) exposureValues */
+export function getExposureValues(min?: number, max?: number): number[] {
   if (!validateNumber(min, false)) {
     throw new Sunny16Exception(`Called with wrongly typed argument min(${min}), expecting number.`);
   }
@@ -149,15 +105,11 @@ export const getExposureValues: getExposureValuesI = function (min, max) {
   }
 
   if (!min && !max) { return EXPOSURE_VALUES; }
-  return setNumberBounds(EXPOSURE_VALUES, min, max);
-};
-
-/** Calculates LightValue by fNumber */
-interface byFNumberI {
-  (lightValue: number, filmSpeed: number, config?: configI): cameraSettings;
+  return setBounds<number>(EXPOSURE_VALUES, min, max);
 }
 
-export const byFNumber: byFNumberI =  function (lightValue, filmSpeed, config) {
+/** Calculates LightValue by fNumber */
+export function byFNumber(lightValue: number, filmSpeed: number, config?: configI): cameraSettings {
   if (!validateNumber(lightValue, true)) {
     throw new Sunny16Exception(`Called with wrongly typed argument lightValue(${lightValue}), expecting number.`);
   }
@@ -191,14 +143,10 @@ export const byFNumber: byFNumberI =  function (lightValue, filmSpeed, config) {
     filmSpeed,
     settings: fNumbers.map(matchingShutterSpeed).filter(notNullSelector('shutterSpeed')),
   };
-};
-
-/** Calculates LightValue by fNumber */
-interface byShutterSpeedI {
-  (lightValue: number, filmSpeed: number, config?: configI): cameraSettings;
 }
 
-export const byShutterSpeed: byShutterSpeedI = function (lightValue, filmSpeed, config) {
+/** Calculates LightValue by fNumber */
+export function byShutterSpeed(lightValue: number, filmSpeed: number, config?: configI): cameraSettings {
   if (!validateNumber(lightValue, true)) {
     throw new Sunny16Exception(`Called with wrongly typed argument lightValue(${lightValue}), expecting number.`);
   }
@@ -232,14 +180,10 @@ export const byShutterSpeed: byShutterSpeedI = function (lightValue, filmSpeed, 
     filmSpeed,
     settings: shutterSpeeds.map(matchingFNumber).filter(notNullSelector('fNumber')),
   };
-};
-
-/** Calculates ExposureValue */
-interface exposureValueI {
-  (nominalFNumber: number, nominalShutterSpeed: string): number|null;
 }
 
-export const exposureValue: exposureValueI = function (nominalFNumber, nominalShutterSpeed) {
+/** Calculates ExposureValue */
+export function exposureValue(nominalFNumber: number, nominalShutterSpeed: string): number|null {
   if (!validateNumber(nominalFNumber, true)) {
     throw new Sunny16Exception(
       `Called with wrongly typed argument nominalFNumber(${nominalFNumber}), expecting number.`,
@@ -261,14 +205,10 @@ export const exposureValue: exposureValueI = function (nominalFNumber, nominalSh
   if (!fNumber || !shutterSpeed) { return null; }
 
   return calcExposureValue(exactValue(fNumber), exactValue(shutterSpeed), true);
-};
-
-/** Get LV for fNumber & shutterSpeed and target filmSpeed (in nominal representation) */
-interface lightValueI {
-  (nominalFNumber: number, nominalShutterSpeed: string, filmSpeed: number): number|null;
 }
 
-export const lightValue: lightValueI = function (nominalFNumber, nominalShutterSpeed, filmSpeed) {
+/** Get LV for fNumber & shutterSpeed and target filmSpeed (in nominal representation) */
+export function lightValue(nominalFNumber: number, nominalShutterSpeed: string, filmSpeed: number): number|null {
   if (!validateNumber(nominalFNumber, true)) {
     throw new Sunny16Exception(
       `Called with wrongly typed argument nominalFNumber(${nominalFNumber}), expecting number.`,
@@ -290,7 +230,7 @@ export const lightValue: lightValueI = function (nominalFNumber, nominalShutterS
   if (!fNumber || !shutterSpeed) { return null; }
 
   return calcLightValue(exactValue(fNumber), exactValue(shutterSpeed), filmSpeed);
-};
+}
 
-/** Public API cameraSettings alias */
+/** cameraSettings alias */
 export const cameraSettings = byShutterSpeed;
