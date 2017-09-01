@@ -22,15 +22,6 @@ export const clip: clipI = function (arr, min, max) {
   return arr.slice(withDefault(minI, 0), incrementIfNotLast(withDefault(maxI, length)));
 };
 
-/** Checks if a value is numeric */
-interface isNumericI {
-  (n: any): boolean;
-}
-
-export const isNumeric: isNumericI = function (n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
-};
-
 /** Compares two floats with a given epsilon */
 interface compareFloatsI {
   (a: number, b: number, eps?: number): boolean;

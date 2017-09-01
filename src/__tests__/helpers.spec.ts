@@ -1,4 +1,4 @@
-import { clip } from '../helpers';
+import { clip, compareFloats } from '../helpers';
 
 describe('clip()', () => {
   const mockData = ['foo', 'bar', 'baz', 'foobar', 'foobaz'];
@@ -21,5 +21,17 @@ describe('clip()', () => {
 });
 
 describe('compareFloats()', () => {
-  it('respects epsilon when comparing numbers', () => {});
+  it('respects epsilon when comparing numbers', () => {
+    const epsilon = 0.001;
+
+    const a = 0.0001;
+    const b = 0.0002;
+
+    expect(compareFloats(a, b, epsilon)).toBeTruthy();
+
+    const c = 0.001;
+    const d = 0.0022;
+
+    expect(compareFloats(c, d, epsilon)).toBeFalsy();
+  });
 });

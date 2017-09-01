@@ -1,8 +1,8 @@
-import { EXPOSURE_VALUES, FILM_SPEEDS } from '../index';
-import { isNumeric } from '../helpers';
 import {
   getFNumbers,
   getShutterSpeeds,
+  getExposureValues,
+  getFilmSpeeds,
   byFNumber,
   byShutterSpeed,
   exposureValue,
@@ -48,8 +48,10 @@ describe('Sunny16', () => {
     });
 
     it('matches snapshot results for all possible configurations', () => {
-      const allCalculations = EXPOSURE_VALUES.map((ev) => {
-        return FILM_SPEEDS.map(iso => byFNumber(ev, iso, configAll));
+      const exposureValues = getExposureValues();
+      const filmSpeeds = getFilmSpeeds();
+      const allCalculations = exposureValues.map((ev) => {
+        return filmSpeeds.map(iso => byFNumber(ev, iso, configAll));
       });
 
       const snapShot = JSON.stringify(allCalculations);
@@ -88,8 +90,11 @@ describe('Sunny16', () => {
     });
 
     it('matches snapshot results for all possible configurations', () => {
-      const allCalculations = EXPOSURE_VALUES.map((ev) => {
-        return FILM_SPEEDS.map(iso => byShutterSpeed(ev, iso, configAll));
+      const exposureValues = getExposureValues();
+      const filmSpeeds = getFilmSpeeds();
+
+      const allCalculations = exposureValues.map((ev) => {
+        return filmSpeeds.map(iso => byShutterSpeed(ev, iso, configAll));
       });
 
       const snapShot = JSON.stringify(allCalculations);
@@ -140,9 +145,11 @@ describe('Sunny16', () => {
     it('matches snapshot results for all possible configurations', () => {
       const fNumbers = getFNumbers();
       const shutterSpeeds = getShutterSpeeds();
+      const filmSpeeds = getFilmSpeeds();
+
       const result = fNumbers
         .map(fNumber => shutterSpeeds
-          .map(speed => FILM_SPEEDS
+          .map(speed => filmSpeeds
             .map(iso => lightValue(fNumber.nominal, speed.nominal, iso))));
 
       const snapShot = JSON.stringify(result);
@@ -150,4 +157,3 @@ describe('Sunny16', () => {
     });
   });
 });
-

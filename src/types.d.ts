@@ -32,8 +32,8 @@ interface cameraSettings {
 }
 
 interface configI {
-  fNumbers?: FNumberType[],
-  shutterSpeeds?: ShutterSpeedType[],
+  fNumbers?: FNumberType[];
+  shutterSpeeds?: ShutterSpeedType[];
 }
 
 type anyCameraValue = FNumberType|ShutterSpeedType;

@@ -23,6 +23,13 @@ import {
   stopNumber,
 } from './helpers';
 
+import {
+  validateNumber,
+  validateString,
+  validateConfig,
+  Sunny16Exception,
+} from './validation';
+
 /** clips an array with two bound functions */
 interface setBoundsI {
   (data: any[], min?: number|string, max?: number|string): any;
@@ -77,6 +84,14 @@ interface getFNumbersI {
 }
 
 export const getFNumbers: getFNumbersI = function (min, max) {
+  if (!validateNumber(min, false)) {
+    throw new Sunny16Exception(`Called with wrongly typed argument min(${min}), expecting number.`);
+  }
+
+  if (!validateNumber(max, false)) {
+    throw new Sunny16Exception(`Called with wrongly typed argument max(${max}), expecting number.`);
+  }
+
   if (!min && !max) { return F_NUMBERS; }
   return setFNumberBounds(F_NUMBERS, min, max);
 };
@@ -87,6 +102,14 @@ interface getShutterSpeedsI {
 }
 
 export const getShutterSpeeds: getShutterSpeedsI = function (min, max) {
+  if (!validateString(min, false)) {
+    throw new Sunny16Exception(`Called with wrongly typed argument min(${min}), expecting string.`);
+  }
+
+  if (!validateString(max, false)) {
+    throw new Sunny16Exception(`Called with wrongly typed argument max(${max}), expecting string.`);
+  }
+
   if (!min && !max) { return SHUTTER_SPEEDS; }
   return setShutterSpeedBounds(SHUTTER_SPEEDS, min, max);
 };
@@ -98,6 +121,14 @@ interface getFilmSpeedsI {
 }
 
 export const getFilmSpeeds: getFilmSpeedsI = function (min, max) {
+  if (!validateNumber(min, false)) {
+    throw new Sunny16Exception(`Called with wrongly typed argument min(${min}), expecting number.`);
+  }
+
+  if (!validateNumber(max, false)) {
+    throw new Sunny16Exception(`Called with wrongly typed argument max(${max}), expecting number.`);
+  }
+
   if (!min && !max) { return FILM_SPEEDS; }
   return setNumberBounds(FILM_SPEEDS, min, max);
 };
@@ -109,6 +140,14 @@ interface getExposureValuesI {
 }
 
 export const getExposureValues: getExposureValuesI = function (min, max) {
+  if (!validateNumber(min, false)) {
+    throw new Sunny16Exception(`Called with wrongly typed argument min(${min}), expecting number.`);
+  }
+
+  if (!validateNumber(max, false)) {
+    throw new Sunny16Exception(`Called with wrongly typed argument max(${max}), expecting number.`);
+  }
+
   if (!min && !max) { return EXPOSURE_VALUES; }
   return setNumberBounds(EXPOSURE_VALUES, min, max);
 };
@@ -119,6 +158,18 @@ interface byFNumberI {
 }
 
 export const byFNumber: byFNumberI =  function (lightValue, filmSpeed, config) {
+  if (!validateNumber(lightValue, true)) {
+    throw new Sunny16Exception(`Called with wrongly typed argument lightValue(${lightValue}), expecting number.`);
+  }
+
+  if (!validateNumber(filmSpeed, true)) {
+    throw new Sunny16Exception(`Called with wrongly typed argument filmSpeed(${filmSpeed}), expecting number.`);
+  }
+
+  if (!validateConfig(config)) {
+    throw new Sunny16Exception('Called with an invalid config.');
+  }
+
   const fNumberArr = (config && config.fNumbers) || getFNumbers(2, 16);
   const shutterSpeedArr = (config && config.shutterSpeeds) || getShutterSpeeds('1/1000', '1');
 
@@ -148,8 +199,20 @@ interface byShutterSpeedI {
 }
 
 export const byShutterSpeed: byShutterSpeedI = function (lightValue, filmSpeed, config) {
+  if (!validateNumber(lightValue, true)) {
+    throw new Sunny16Exception(`Called with wrongly typed argument lightValue(${lightValue}), expecting number.`);
+  }
+
+  if (!validateNumber(filmSpeed, true)) {
+    throw new Sunny16Exception(`Called with wrongly typed argument filmSpeed(${filmSpeed}), expecting number.`);
+  }
+
+  if (!validateConfig(config)) {
+    throw new Sunny16Exception(`Called with invalid config (${config}).`);
+  }
+
   const fNumberArr = (config && config.fNumbers) || getFNumbers(2, 16);
-  const shutterSpeedArr = (config && config.shutterSpeeds) || getShutterSpeeds('1/1000', '1');
+  const shutterSpeedArr = (config && config.shutterSpeeds) || getShutterSpeeds('1/1000', '1');
 
   const fNumbers = decorateExactFNumbers(fNumberArr);
   const shutterSpeeds = decorateExactShutterSpeeds(shutterSpeedArr);
@@ -177,8 +240,24 @@ interface exposureValueI {
 }
 
 export const exposureValue: exposureValueI = function (nominalFNumber, nominalShutterSpeed, config) {
+  if (!validateNumber(nominalFNumber, true)) {
+    throw new Sunny16Exception(
+      `Called with wrongly typed argument nominalFNumber(${nominalFNumber}), expecting number.`,
+    );
+  }
+
+  if (!validateString(nominalShutterSpeed, true)) {
+    throw new Sunny16Exception(
+      `Called with wrongly typed argument nominalShutterSpeed(${nominalShutterSpeed}), expecting string.`,
+    );
+  }
+
+  if (!validateConfig(config)) {
+    throw new Sunny16Exception(`Called with invalid config (${config}).`);
+  }
+
   const fNumberArr = (config && config.fNumbers) || getFNumbers();
-  const shutterSpeedArr = (config && config.shutterSpeeds) || getShutterSpeeds();
+  const shutterSpeedArr = (config && config.shutterSpeeds) || getShutterSpeeds();
 
   const fNumbers = decorateExactFNumbers(fNumberArr);
   const shutterSpeeds = decorateExactShutterSpeeds(shutterSpeedArr);
@@ -197,8 +276,24 @@ interface lightValueI {
 }
 
 export const lightValue: lightValueI = function (nominalFNumber, nominalShutterSpeed, filmSpeed, config) {
+  if (!validateNumber(nominalFNumber, true)) {
+    throw new Sunny16Exception(
+      `Called with wrongly typed argument nominalFNumber(${nominalFNumber}), expecting number.`,
+    );
+  }
+
+  if (!validateString(nominalShutterSpeed, true)) {
+    throw new Sunny16Exception(
+      `Called with wrongly typed argument nominalShutterSpeed(${nominalShutterSpeed}), expecting string.`,
+    );
+  }
+
+  if (!validateConfig(config)) {
+    throw new Sunny16Exception(`Called with invalid config (${config}).`);
+  }
+
   const fNumberArr = (config && config.fNumbers) || getFNumbers();
-  const shutterSpeedArr = (config && config.shutterSpeeds) || getShutterSpeeds();
+  const shutterSpeedArr = (config && config.shutterSpeeds) || getShutterSpeeds();
 
   const fNumbers = decorateExactFNumbers(fNumberArr);
   const shutterSpeeds = decorateExactShutterSpeeds(shutterSpeedArr);
