@@ -87,10 +87,10 @@ export const getShutterSpeeds: getShutterSpeedsI = function (min, max) {
 
 /** Calculates LightValue by fNumber */
 interface byFNumberI {
-  (ev: number, filmSpeed: number, config?: configI): cameraSettings;
+  (lightValue: number, filmSpeed: number, config?: configI): cameraSettings;
 }
 
-export const byFNumber: byFNumberI =  function (ev, filmSpeed, config) {
+export const byFNumber: byFNumberI =  function (lightValue, filmSpeed, config) {
   const fNumberArr = (config && config.fNumbers) || getFNumbers(2, 16);
   const shutterSpeedArr = (config && config.shutterSpeeds) || getShutterSpeeds('1/1000', '1');
 
@@ -98,7 +98,7 @@ export const byFNumber: byFNumberI =  function (ev, filmSpeed, config) {
   const shutterSpeeds = decorateExactShutterSpeeds(shutterSpeedArr);
 
   const matchingShutterSpeed = (fNumber: FNumberExactType): cameraSetting => {
-    const val = calcShutterSpeed(ev, exactValue(fNumber), filmSpeed);
+    const val = calcShutterSpeed(lightValue, exactValue(fNumber), filmSpeed);
     const shutterSpeed = shutterSpeeds.find(exactSelector(val));
 
     return {
@@ -108,7 +108,7 @@ export const byFNumber: byFNumberI =  function (ev, filmSpeed, config) {
   };
 
   return {
-    ev,
+    lightValue,
     filmSpeed,
     settings: fNumbers.map(matchingShutterSpeed).filter(notNullSelector('shutterSpeed')),
   };
@@ -116,10 +116,10 @@ export const byFNumber: byFNumberI =  function (ev, filmSpeed, config) {
 
 /** Calculates LightValue by fNumber */
 interface byShutterSpeedI {
-  (ev: number, filmSpeed: number, config?: configI): cameraSettings;
+  (lightValue: number, filmSpeed: number, config?: configI): cameraSettings;
 }
 
-export const byShutterSpeed: byShutterSpeedI = function (ev, filmSpeed, config) {
+export const byShutterSpeed: byShutterSpeedI = function (lightValue, filmSpeed, config) {
   const fNumberArr = (config && config.fNumbers) || getFNumbers(2, 16);
   const shutterSpeedArr = (config && config.shutterSpeeds) || getShutterSpeeds('1/1000', '1');
 
@@ -127,7 +127,7 @@ export const byShutterSpeed: byShutterSpeedI = function (ev, filmSpeed, config) 
   const shutterSpeeds = decorateExactShutterSpeeds(shutterSpeedArr);
 
   const matchingFNumber = (shutterSpeed: ShutterSpeedExactType): cameraSetting => {
-    const val = calcFNumber(ev, exactValue(shutterSpeed), filmSpeed);
+    const val = calcFNumber(lightValue, exactValue(shutterSpeed), filmSpeed);
     const fNumber = fNumbers.find(exactSelector(val));
 
     return {
@@ -137,7 +137,7 @@ export const byShutterSpeed: byShutterSpeedI = function (ev, filmSpeed, config) 
   };
 
   return {
-    ev,
+    lightValue,
     filmSpeed,
     settings: shutterSpeeds.map(matchingFNumber).filter(notNullSelector('fNumber')),
   };

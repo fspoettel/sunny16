@@ -28,7 +28,7 @@ describe('Sunny16', () => {
       const result = byFNumber(15, 200, config);
 
       expect(result).toMatchObject({
-        ev: 15,
+        lightValue: 15,
         filmSpeed: 200,
         settings: [{
           fNumber: 16,
@@ -68,7 +68,7 @@ describe('Sunny16', () => {
       const result = byShutterSpeed(15, 200, config);
 
       expect(result).toMatchObject({
-        ev: 15,
+        lightValue: 15,
         filmSpeed: 200,
         settings: [{
           fNumber: 16,

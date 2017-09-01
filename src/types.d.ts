@@ -26,7 +26,7 @@ interface cameraSetting {
 }
 
 interface cameraSettings {
-  ev: number;
+  lightValue: number;
   filmSpeed: number;
   settings: cameraSetting[];
 }

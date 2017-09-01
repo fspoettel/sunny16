@@ -43,13 +43,13 @@ interface calcFNumberI {
 }
 
 /** Derives exact fNumber */
-export const calcFNumber: calcFNumberI = function (ev, exactShutterSpeed, filmSpeed) {
-  if (!Number.isInteger(ev) || !isNumeric(exactShutterSpeed || !Number.isInteger(filmSpeed))) {
+export const calcFNumber: calcFNumberI = function (lightValue, exactShutterSpeed, filmSpeed) {
+  if (!Number.isInteger(lightValue) || !isNumeric(exactShutterSpeed || !Number.isInteger(filmSpeed))) {
     throw new Error();
   }
 
   const y = (filmSpeed / 100);
-  const x = Math.sqrt((2 ** ev) * exactShutterSpeed * y);
+  const x = Math.sqrt((2 ** lightValue) * exactShutterSpeed * y);
   return x;
 };
 
@@ -58,13 +58,13 @@ interface calcShutterSpeedI {
 }
 
 /** Derives exact shutterSpeed */
-export const calcShutterSpeed: calcShutterSpeedI = function (ev, exactFNumber, filmSpeed) {
-  if (!Number.isInteger(ev) || !isNumeric(exactFNumber) || !Number.isInteger(filmSpeed)) {
+export const calcShutterSpeed: calcShutterSpeedI = function (lightValue, exactFNumber, filmSpeed) {
+  if (!Number.isInteger(lightValue) || !isNumeric(exactFNumber) || !Number.isInteger(filmSpeed)) {
     throw new Error();
   }
 
   const y = (filmSpeed / 100);
-  const x = (exactFNumber * exactFNumber) / (2 ** ev);
+  const x = (exactFNumber * exactFNumber) / (2 ** lightValue);
   return x / y;
 };
 

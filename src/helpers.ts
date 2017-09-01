@@ -6,15 +6,15 @@ interface clipI {
 export const clip: clipI = function (arr, min, max) {
   const length:number = arr.length;
 
-  const withDefault = (i: number, val: number) => {
+  function withDefault(i: number, val: number) {
     if (i !== -1) { return i; }
     return val;
-  };
+  }
 
-  const incrementIfNotLast = (i: number) => {
+  function incrementIfNotLast(i: number) {
     if (i < length) { return i + 1; }
     return length;
-  };
+  }
 
   const minI: number = min ? arr.findIndex(min) : 0;
   const maxI: number = max ? arr.findIndex(max) : arr.length;
