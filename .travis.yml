@@ -10,6 +10,7 @@ script:
 - yarn lint
 - yarn test
 deploy:
+  skip_cleanup: true
   provider: npm
   email: contact@felics.me
   api_key:
