@@ -1,11 +1,18 @@
 sudo: false
 language: node_js
 nodejs:
-- "stable"
+- stable
 cache:
   yarn: true
   directories:
-    - node_modules
+  - node_modules
 script:
-  - yarn lint
-  - yarn test
+- yarn lint
+- yarn test
+deploy:
+  provider: npm
+  email: contact@felics.me
+  api_key:
+    secure: MSYP6neEnMHO22sESdleJepy5q3eKlAiq5Gzbmtzo08Gw9aqPBDuCzFMDmdyvjiDkUHodSsAiHXMGZyVKRSaewhMpp3fKjfaN9OwQSld/fNaZZPm9M6bBTiYRLw5jFKheT/cvHuOen6XzuKOdJSnDwuHOOmr62Yu1EthltJceayAjLOZg0HJUCyvQ57D++Fmt6P/42OC4MZ/mu9peSIYI9Aw9IuJYOyulJD9elJW4QhNOJ19lUQjZ9I3gXRTa9u2zFr2T1OPLFmNH69tjEiK9GhxmQB05D867ZhIaUIsctEPjSLai6hXUj2byhlQEH0bTfCyrDhpPbHaM8xbXWJCJKyBT6A5jh1+1xUiJtzW4LDwzWiYzuqgNxjtRkmfiMTMwaaTUWzGY7FGNQqgGkN1DjcQujSqkXpYIHp8gj/RZdSCyqhXv4HmMTrH+KTOsFYKoDdn53sYwFcfWtSoZkxP0UnDcko2QtRZkLfXp4OdmspZq5516dYhrb7HYgYgsabQxs2va67MnWJD5mKnj3wC22FP30EjufD9V8V5TiGPoh4m/t4vrvqmVnJTNK4oRttj73ZYNPpjSwj6r6UBrxHQMdf0QuZHl04NNK4RwTviz4sfotlvdrUISlPzuElmLx2dSKVxzqm6QBC4aXi/4tl8z4K9vTlGJopvDxjlnbq8MCY=
+  on:
+    tags: true
